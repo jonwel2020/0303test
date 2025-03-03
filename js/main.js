@@ -6,9 +6,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const newTestButton = document.getElementById('new-test');
     const shareButton = document.getElementById('share-result');
     
+    // 添加 API Key 设置功能
+    setupApiKeyInput();
+    
     // 表单提交事件处理
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', async function(e) {
         e.preventDefault(); // 阻止表单默认提交行为
+        
+        // 显示加载状态
+        showLoading(true);
         
         // 获取表单数据
         const formData = {
@@ -16,21 +22,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: document.getElementById('name1').value,
                 gender: document.getElementById('gender1').value,
                 birthday: document.getElementById('birthday1').value,
-                hobbies: document.getElementById('hobby1').value.split(',').map(h => h.trim())
+                hobbies: document.getElementById('hobby1').value.split(',').map(h => h.trim()).filter(h => h),
+                values: document.getElementById('values1').value.split(',').map(v => v.trim()).filter(v => v),
+                communication: document.getElementById('communication1').value
             },
             person2: {
                 name: document.getElementById('name2').value,
                 gender: document.getElementById('gender2').value,
                 birthday: document.getElementById('birthday2').value,
-                hobbies: document.getElementById('hobby2').value.split(',').map(h => h.trim())
+                hobbies: document.getElementById('hobby2').value.split(',').map(h => h.trim()).filter(h => h),
+                values: document.getElementById('values2').value.split(',').map(v => v.trim()).filter(v => v),
+                communication: document.getElementById('communication2').value
             }
         };
         
-        // 调用预测函数
-        const result = predictCompatibility(formData);
-        
-        // 显示结果
-        displayResults(result);
+        try {
+            // 调用预测函数（现在是异步的）
+            const result = await window.PredictionAPI.predictCompatibility(formData);
+            
+            // 显示结果
+            displayResults(result);
+        } catch (error) {
+            // 显示错误信息
+            showError(error.message);
+        } finally {
+            // 隐藏加载状态
+            showLoading(false);
+        }
     });
     
     // 重新测试按钮点击事件
@@ -73,6 +91,130 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
+    // 设置 API Key 输入功能
+    function setupApiKeyInput() {
+        // 创建 API Key 设置按钮
+        const settingsButton = document.createElement('button');
+        settingsButton.type = 'button';
+        settingsButton.className = 'settings-button';
+        settingsButton.innerHTML = '<span class="settings-icon">⚙️</span>';
+        settingsButton.title = '设置 DeepSeek API Key';
+        
+        // 添加到页面
+        const header = document.querySelector('header .container');
+        header.appendChild(settingsButton);
+        
+        // 创建设置对话框
+        const settingsDialog = document.createElement('div');
+        settingsDialog.className = 'settings-dialog';
+        settingsDialog.innerHTML = `
+            <div class="settings-content">
+                <h3>设置 DeepSeek API Key</h3>
+                <p>请输入您的 DeepSeek API Key 以启用高级 AI 分析功能。</p>
+                <div class="form-group">
+                    <label for="api-key">API Key</label>
+                    <input type="password" id="api-key" placeholder="sk-...">
+                </div>
+                <div class="dialog-actions">
+                    <button type="button" class="btn-primary save-api-key">保存</button>
+                    <button type="button" class="btn-secondary cancel-dialog">取消</button>
+                </div>
+            </div>
+        `;
+        
+        // 添加到页面
+        document.body.appendChild(settingsDialog);
+        
+        // 设置按钮点击事件
+        settingsButton.addEventListener('click', function() {
+            settingsDialog.classList.add('visible');
+            // 从本地存储加载已保存的 API Key
+            const savedKey = localStorage.getItem('deepseek_api_key');
+            if (savedKey) {
+                document.getElementById('api-key').value = savedKey;
+            }
+        });
+        
+        // 保存按钮点击事件
+        settingsDialog.querySelector('.save-api-key').addEventListener('click', function() {
+            const apiKey = document.getElementById('api-key').value.trim();
+            if (apiKey) {
+                // 保存到本地存储
+                saveApiKey(apiKey);
+                // 设置到 API 模块
+                window.PredictionAPI.setApiKey(apiKey);
+                // 显示成功消息
+                showMessage('API Key 已保存');
+            } else {
+                showMessage('请输入有效的 API Key', true);
+            }
+            settingsDialog.classList.remove('visible');
+        });
+        
+        // 取消按钮点击事件
+        settingsDialog.querySelector('.cancel-dialog').addEventListener('click', function() {
+            settingsDialog.classList.remove('visible');
+        });
+        
+        // 点击对话框外部关闭
+        settingsDialog.addEventListener('click', function(e) {
+            if (e.target === settingsDialog) {
+                settingsDialog.classList.remove('visible');
+            }
+        });
+        
+        // 从本地存储加载已保存的 API Key
+        const savedKey = localStorage.getItem('deepseek_api_key');
+        if (savedKey) {
+            window.PredictionAPI.setApiKey(savedKey);
+        }
+    }
+    
+    // 显示加载状态
+    function showLoading(isLoading) {
+        const loadingElement = document.querySelector('.loading-overlay') || createLoadingElement();
+        
+        if (isLoading) {
+            loadingElement.style.display = 'flex';
+        } else {
+            loadingElement.style.display = 'none';
+        }
+    }
+    
+    // 创建加载元素
+    function createLoadingElement() {
+        const loadingElement = document.createElement('div');
+        loadingElement.className = 'loading-overlay';
+        loadingElement.innerHTML = `
+            <div class="loading-spinner"></div>
+            <p>正在分析中，请稍候...</p>
+        `;
+        document.body.appendChild(loadingElement);
+        return loadingElement;
+    }
+    
+    // 显示错误信息
+    function showError(message) {
+        showMessage(message, true);
+    }
+    
+    // 显示消息
+    function showMessage(message, isError = false) {
+        const messageElement = document.createElement('div');
+        messageElement.className = `message ${isError ? 'error' : 'success'}`;
+        messageElement.textContent = message;
+        
+        document.body.appendChild(messageElement);
+        
+        // 3秒后自动消失
+        setTimeout(() => {
+            messageElement.classList.add('fade-out');
+            setTimeout(() => {
+                document.body.removeChild(messageElement);
+            }, 500);
+        }, 3000);
+    }
+    
     // 备用分享方法（复制到剪贴板）
     function fallbackShare(text) {
         // 创建临时输入框
@@ -84,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.removeChild(input);
         
         // 显示提示
-        alert('分享文本已复制到剪贴板！');
+        showMessage('分享文本已复制到剪贴板！');
     }
     
     // 显示结果的函数
@@ -136,5 +278,65 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             scoreElement.textContent = Math.round(count);
         }, interval);
+        
+        // 生成雷达图
+        generateRadarChart(result.details);
+    }
+    
+    // 添加雷达图生成函数
+    function generateRadarChart(details) {
+        const ctx = document.getElementById('compatibility-radar-chart').getContext('2d');
+        
+        // 如果已经有图表，先销毁
+        if (window.compatibilityChart) {
+            window.compatibilityChart.destroy();
+        }
+        
+        // 创建新图表
+        window.compatibilityChart = new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['性格匹配度', '兴趣爱好相似度', '生活习惯兼容性', '星座匹配度', '长期发展潜力'],
+                datasets: [{
+                    label: '契合度分析',
+                    data: [
+                        details.personality,
+                        details.hobbies,
+                        details.lifestyle,
+                        details.zodiac,
+                        details.longTerm
+                    ],
+                    backgroundColor: 'rgba(232, 62, 140, 0.2)',
+                    borderColor: 'rgba(232, 62, 140, 1)',
+                    pointBackgroundColor: 'rgba(232, 62, 140, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(232, 62, 140, 1)'
+                }]
+            },
+            options: {
+                scale: {
+                    ticks: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+    
+    // 改进 API Key 存储方式
+    function saveApiKey(key) {
+        // 简单加密（实际应用中应使用更安全的方式）
+        const encryptedKey = btoa(key);
+        localStorage.setItem('deepseek_api_key_enc', encryptedKey);
+    }
+    
+    function getApiKey() {
+        const encryptedKey = localStorage.getItem('deepseek_api_key_enc');
+        if (encryptedKey) {
+            return atob(encryptedKey);
+        }
+        return null;
     }
 }); 

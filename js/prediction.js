@@ -1,14 +1,125 @@
 /**
  * AI恋爱/婚姻契合度预测算法
- * 这个文件包含预测两个人契合度的核心算法
+ * 这个文件包含预测两个人契合度的核心算法，使用 DeepSeek 大模型 API
  */
 
+// DeepSeek API 配置
+const DEEPSEEK_API_URL = 'https://api.deepseek.com';
+let apiKey = ''; // 用户需要在界面上输入自己的 API Key
+
 // 主预测函数
-function predictCompatibility(data) {
+async function predictCompatibility(data) {
     // 提取两个人的信息
     const person1 = data.person1;
     const person2 = data.person2;
     
+    try {
+        // 调用 DeepSeek API 进行分析
+        const result = await analyzeCompatibilityWithDeepSeek(person1, person2);
+        return result;
+    } catch (error) {
+        console.error('DeepSeek API 调用失败:', error);
+        // 如果 API 调用失败，回退到本地算法
+        return fallbackLocalPrediction(person1, person2);
+    }
+}
+
+// 使用 DeepSeek API 分析契合度
+async function analyzeCompatibilityWithDeepSeek(person1, person2) {
+    // 检查是否有 API Key
+    if (!apiKey) {
+        throw new Error('未设置 DeepSeek API Key');
+    }
+    
+    // 构建发送给 DeepSeek 的提示信息
+    const prompt = `
+    作为一个专业的恋爱/婚姻契合度分析专家，请分析以下两个人的匹配程度：
+    
+    第一个人信息:
+    - 姓名: ${person1.name}
+    - 性别: ${person1.gender}
+    - 出生日期: ${person1.birthday}
+    - 兴趣爱好: ${person1.hobbies.join(', ')}
+    
+    第二个人信息:
+    - 姓名: ${person2.name}
+    - 性别: ${person2.gender}
+    - 出生日期: ${person2.birthday}
+    - 兴趣爱好: ${person2.hobbies.join(', ')}
+    
+    请从以下几个维度进行分析，并给出百分比评分（0-100）：
+    1. 性格匹配度
+    2. 兴趣爱好相似度
+    3. 生活习惯兼容性
+    4. 星座匹配度
+    5. 长期发展潜力
+    
+    然后给出总体契合度评分（0-100），并提供一段详细的分析总结。
+    
+    请以JSON格式返回结果，格式如下：
+    {
+        "score": 总体评分,
+        "details": {
+            "personality": 性格匹配度评分,
+            "hobbies": 兴趣爱好相似度评分,
+            "lifestyle": 生活习惯兼容性评分,
+            "zodiac": 星座匹配度评分,
+            "longTerm": 长期发展潜力评分
+        },
+        "summary": "详细分析总结"
+    }
+    `;
+    
+    // 调用 DeepSeek API
+    const response = await fetch(`${DEEPSEEK_API_URL}/v1/chat/completions`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+            model: 'deepseek-chat',
+            messages: [
+                { role: 'system', content: '你是一个专业的恋爱/婚姻契合度分析专家，擅长分析两个人的匹配程度。' },
+                { role: 'user', content: prompt }
+            ],
+            temperature: 0.7,
+            max_tokens: 1000
+        })
+    });
+    
+    if (!response.ok) {
+        throw new Error(`API 请求失败: ${response.status} ${response.statusText}`);
+    }
+    
+    const responseData = await response.json();
+    
+    // 解析 API 返回的结果
+    try {
+        // 从回复中提取 JSON 部分
+        const content = responseData.choices[0].message.content;
+        const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/\{[\s\S]*\}/);
+        
+        let result;
+        if (jsonMatch) {
+            result = JSON.parse(jsonMatch[1] || jsonMatch[0]);
+        } else {
+            throw new Error('无法解析 API 返回的 JSON 数据');
+        }
+        
+        // 添加人员信息到结果中
+        result.person1 = person1;
+        result.person2 = person2;
+        
+        return result;
+    } catch (error) {
+        console.error('解析 API 返回数据失败:', error);
+        throw error;
+    }
+}
+
+// 本地预测算法（作为备用）
+function fallbackLocalPrediction(person1, person2) {
     // 计算各个维度的匹配度
     const personalityScore = calculatePersonalityMatch(person1, person2);
     const hobbiesScore = calculateHobbiesMatch(person1.hobbies, person2.hobbies);
@@ -42,6 +153,11 @@ function predictCompatibility(data) {
         },
         summary: summary
     };
+}
+
+// 设置 API Key
+function setApiKey(key) {
+    apiKey = key;
 }
 
 // 计算性格匹配度（基于姓名和生日的模拟算法）
@@ -261,4 +377,10 @@ function generateSummary(score, name1, name2) {
     } else {
         return `${name1}和${name2}的契合度较低。你们在多个重要方面可能存在较大差异，这可能会导致关系中出现更多的挑战和摩擦。不过，爱情有时就是克服困难的过程，如果双方都愿意为对方改变和成长，任何关系都有可能成功。`;
     }
-} 
+}
+
+// 导出函数供其他文件使用
+window.PredictionAPI = {
+    predictCompatibility: predictCompatibility,
+    setApiKey: setApiKey
+}; 

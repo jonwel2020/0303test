@@ -62,6 +62,20 @@
                                 <label for="hobby1">兴趣爱好 (用逗号分隔)</label>
                                 <input type="text" id="hobby1" name="hobby1" placeholder="例如：阅读,旅行,音乐">
                             </div>
+                            <div class="form-group">
+                                <label for="values1">价值观 (用逗号分隔，如：家庭,事业,健康)</label>
+                                <input type="text" id="values1" name="values1">
+                            </div>
+                            <div class="form-group">
+                                <label for="communication1">沟通风格 (选择最符合的)</label>
+                                <select id="communication1" name="communication1">
+                                    <option value="">请选择</option>
+                                    <option value="direct">直接表达型</option>
+                                    <option value="emotional">情感表达型</option>
+                                    <option value="analytical">分析思考型</option>
+                                    <option value="quiet">安静内敛型</option>
+                                </select>
+                            </div>
                         </div>
 
                         <!-- 第二个人的信息 -->
@@ -88,6 +102,20 @@
                                 <label for="hobby2">兴趣爱好 (用逗号分隔)</label>
                                 <input type="text" id="hobby2" name="hobby2" placeholder="例如：阅读,旅行,音乐">
                             </div>
+                            <div class="form-group">
+                                <label for="values2">价值观 (用逗号分隔，如：家庭,事业,健康)</label>
+                                <input type="text" id="values2" name="values2">
+                            </div>
+                            <div class="form-group">
+                                <label for="communication2">沟通风格 (选择最符合的)</label>
+                                <select id="communication2" name="communication2">
+                                    <option value="">请选择</option>
+                                    <option value="direct">直接表达型</option>
+                                    <option value="emotional">情感表达型</option>
+                                    <option value="analytical">分析思考型</option>
+                                    <option value="quiet">安静内敛型</option>
+                                </select>
+                            </div>
                         </div>
 
                         <!-- 提交按钮 -->
@@ -110,6 +138,9 @@
                             <span id="score-value">0</span><span>%</span>
                         </div>
                     </div>
+                    <div class="radar-chart-container">
+                        <canvas id="compatibility-radar-chart"></canvas>
+                    </div>
                     <div class="result-details">
                         <h4>详细分析</h4>
                         <div id="result-content">
@@ -128,7 +159,7 @@
         <section id="about" class="about-section">
             <div class="container">
                 <h2>关于我们的预测系统</h2>
-                <p>我们的AI恋爱/婚姻契合度预测系统基于多种因素进行分析，包括但不限于：</p>
+                <p>我们的AI恋爱/婚姻契合度预测系统基于 DeepSeek 大模型进行分析，包括但不限于：</p>
                 <ul>
                     <li>性格特质匹配</li>
                     <li>兴趣爱好相似度</li>
@@ -137,6 +168,17 @@
                     <li>价值观契合度</li>
                 </ul>
                 <p>请注意，本系统仅供娱乐参考，真正的爱情需要双方共同经营和努力。</p>
+                
+                <div class="api-info">
+                    <h3>关于 DeepSeek API</h3>
+                    <p>为了获得最准确的分析结果，本系统使用 DeepSeek 大模型 API。您需要：</p>
+                    <ol>
+                        <li>注册 <a href="https://deepseek.com" target="_blank">DeepSeek</a> 账号</li>
+                        <li>获取您的 API Key</li>
+                        <li>点击页面右上角的 ⚙️ 按钮设置您的 API Key</li>
+                    </ol>
+                    <p>如果未设置 API Key，系统将使用本地算法进行分析，但准确度可能较低。</p>
+                </div>
             </div>
         </section>
     </main>
