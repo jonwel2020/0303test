@@ -1,0 +1,109 @@
+/* 淡入动画 */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 1s ease forwards;
+}
+
+.fade-in-delay {
+    opacity: 0;
+    animation: fadeIn 1s ease 0.5s forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 脉冲动画 (用于结果显示) */
+.pulse {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 数字增长动画 */
+@keyframes countUp {
+    from {
+        content: "0";
+    }
+    to {
+        content: attr(data-target);
+    }
+}
+
+/* 按钮悬停效果 */
+.btn-primary, .btn-secondary {
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover, .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 表单输入动画 */
+input:focus, select:focus {
+    transition: all 0.3s ease;
+}
+
+/* 卡片悬停效果 */
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* 结果显示动画 */
+.results-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.results-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 分数圆圈填充动画 */
+.score-circle {
+    position: relative;
+    overflow: hidden;
+}
+
+.score-circle::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(100%);
+    animation: fillUp 1.5s ease forwards;
+}
+
+@keyframes fillUp {
+    to {
+        transform: translateY(0);
+    }
+} 

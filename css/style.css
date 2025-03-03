@@ -1,0 +1,318 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 基础样式 */
+body {
+    font-family: 'Roboto', 'Microsoft YaHei', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f9f0f2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* 标题样式 */
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Lato', 'Microsoft YaHei', sans-serif;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* 链接样式 */
+a {
+    color: #e83e8c;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #d6336c;
+    text-decoration: underline;
+}
+
+/* 头部样式 */
+header {
+    background: linear-gradient(135deg, #e83e8c 0%, #6f42c1 100%);
+    color: white;
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: 20px;
+}
+
+nav ul li a {
+    color: white;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover, nav ul li a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+}
+
+/* 主要内容区样式 */
+main {
+    flex: 1;
+}
+
+/* 英雄区域样式 */
+.hero {
+    text-align: center;
+    padding: 60px 0;
+    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), 
+                url('../images/hearts-bg.jpg') center/cover no-repeat;
+    background-attachment: fixed;
+}
+
+.hero h2 {
+    font-size: 2.5rem;
+    color: #e83e8c;
+    margin-bottom: 15px;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #6c757d;
+    margin-bottom: 30px;
+}
+
+/* 卡片样式 */
+.card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+/* 表单样式 */
+.prediction-form {
+    padding: 40px 0;
+}
+
+.prediction-form h3 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #e83e8c;
+}
+
+.person-info {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.person-info h4 {
+    color: #6f42c1;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #e83e8c;
+    box-shadow: 0 0 0 3px rgba(232, 62, 140, 0.25);
+}
+
+/* 按钮样式 */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-primary, .btn-secondary {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #e83e8c 0%, #6f42c1 100%);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #d6336c 0%, #5e35b1 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #ced4da;
+}
+
+.btn-secondary:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+/* 结果区域样式 */
+.result-card {
+    text-align: center;
+}
+
+.compatibility-score {
+    margin: 30px 0;
+}
+
+.score-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e83e8c 0%, #6f42c1 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.result-details {
+    margin: 30px 0;
+    text-align: left;
+}
+
+.result-details h4 {
+    color: #6f42c1;
+    margin-bottom: 15px;
+}
+
+.result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* 关于部分样式 */
+.about-section {
+    padding: 60px 0;
+    background-color: #f8f9fa;
+}
+
+.about-section h2 {
+    text-align: center;
+    color: #e83e8c;
+    margin-bottom: 30px;
+}
+
+.about-section ul {
+    list-style-position: inside;
+    margin-bottom: 20px;
+}
+
+/* 页脚样式 */
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 30px 0;
+    margin-top: auto;
+}
+
+footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+footer a {
+    color: #f8f9fa;
+}
+
+footer a:hover {
+    color: #e83e8c;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    nav ul {
+        margin-top: 15px;
+        justify-content: center;
+    }
+    
+    .hero h2 {
+        font-size: 2rem;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    footer .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .contact-info {
+        margin-top: 15px;
+    }
+} 

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 恋爱/婚姻契合度预测</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <!-- 引入Google字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 页面头部 -->
+    <header>
+        <div class="container">
+            <h1 class="logo">❤️ 爱情契合度预测</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">首页</a></li>
+                    <li><a href="#about">关于</a></li>
+                    <li><a href="#contact">联系我们</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h2 class="fade-in">探索你们的爱情契合度</h2>
+                <p class="subtitle fade-in-delay">基于AI算法的恋爱与婚姻匹配度分析</p>
+            </div>
+        </section>
+
+        <section class="prediction-form">
+            <div class="container">
+                <div class="card">
+                    <h3>输入信息开始测试</h3>
+                    <form id="compatibility-form">
+                        <!-- 第一个人的信息 -->
+                        <div class="person-info">
+                            <h4>第一个人</h4>
+                            <div class="form-group">
+                                <label for="name1">姓名</label>
+                                <input type="text" id="name1" name="name1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender1">性别</label>
+                                <select id="gender1" name="gender1" required>
+                                    <option value="">请选择</option>
+                                    <option value="male">男</option>
+                                    <option value="female">女</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="birthday1">出生日期</label>
+                                <input type="date" id="birthday1" name="birthday1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hobby1">兴趣爱好 (用逗号分隔)</label>
+                                <input type="text" id="hobby1" name="hobby1" placeholder="例如：阅读,旅行,音乐">
+                            </div>
+                        </div>
+
+                        <!-- 第二个人的信息 -->
+                        <div class="person-info">
+                            <h4>第二个人</h4>
+                            <div class="form-group">
+                                <label for="name2">姓名</label>
+                                <input type="text" id="name2" name="name2" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender2">性别</label>
+                                <select id="gender2" name="gender2" required>
+                                    <option value="">请选择</option>
+                                    <option value="male">男</option>
+                                    <option value="female">女</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="birthday2">出生日期</label>
+                                <input type="date" id="birthday2" name="birthday2" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="hobby2">兴趣爱好 (用逗号分隔)</label>
+                                <input type="text" id="hobby2" name="hobby2" placeholder="例如：阅读,旅行,音乐">
+                            </div>
+                        </div>
+
+                        <!-- 提交按钮 -->
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">开始分析</button>
+                            <button type="reset" class="btn-secondary">重置</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 结果展示区域 (初始隐藏) -->
+        <section class="results-section" id="results-section" style="display: none;">
+            <div class="container">
+                <div class="card result-card">
+                    <h3>你们的契合度分析结果</h3>
+                    <div class="compatibility-score">
+                        <div class="score-circle">
+                            <span id="score-value">0</span><span>%</span>
+                        </div>
+                    </div>
+                    <div class="result-details">
+                        <h4>详细分析</h4>
+                        <div id="result-content">
+                            <!-- 这里将通过JavaScript动态填充内容 -->
+                        </div>
+                    </div>
+                    <div class="result-actions">
+                        <button id="share-result" class="btn-primary">分享结果</button>
+                        <button id="new-test" class="btn-secondary">重新测试</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于部分 -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <h2>关于我们的预测系统</h2>
+                <p>我们的AI恋爱/婚姻契合度预测系统基于多种因素进行分析，包括但不限于：</p>
+                <ul>
+                    <li>性格特质匹配</li>
+                    <li>兴趣爱好相似度</li>
+                    <li>生活习惯兼容性</li>
+                    <li>星座与生肖匹配</li>
+                    <li>价值观契合度</li>
+                </ul>
+                <p>请注意，本系统仅供娱乐参考，真正的爱情需要双方共同经营和努力。</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 AI恋爱契合度预测系统 | 仅供娱乐</p>
+            <div id="contact" class="contact-info">
+                <p>联系我们: <a href="mailto:contact@example.com">contact@example.com</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript文件 -->
+    <script src="js/animations.js"></script>
+    <script src="js/prediction.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 
